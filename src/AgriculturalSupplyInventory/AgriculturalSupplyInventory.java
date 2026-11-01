@@ -203,6 +203,24 @@ public class AgriculturalSupplyInventory extends JFrame {
                     "Product not found.");
         }
     }
+        private void displayInventory() {
+
+        tableModel.setRowCount(0);
+
+        Product[] products = inventory.getProducts();
+
+        for (int i = 0; i < inventory.getCount(); i++) {
+
+            tableModel.addRow(new Object[]{
+                products[i].getProductId(),
+                products[i].getProductName(),
+                products[i].getCategory(),
+                products[i].getQuantity(),
+                products[i].getUnit()
+            });
+        }
+    }
 }
+
     
 
