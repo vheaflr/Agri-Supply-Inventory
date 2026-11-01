@@ -35,4 +35,11 @@ public boolean addProduct(String name, String category,
         return true;
     
     }
+    public Product[] getProducts() {
+        return products;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }
