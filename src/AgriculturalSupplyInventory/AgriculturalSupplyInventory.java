@@ -220,7 +220,64 @@ public class AgriculturalSupplyInventory extends JFrame {
             });
         }
     }
-}
+            
+        private void updateStock() {
 
-    
+    int selectedRow = inventoryTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a product from the table.");
+        return;
+    }
+
+    String productId = tableModel.getValueAt(
+            selectedRow, 0
+    ).toString();
+
+    String input = JOptionPane.showInputDialog(this,
+            "Enter the new stock quantity:");
+
+    if (input == null) {
+        return;
+    }
+
+    try {
+        int newQuantity = Integer.parseInt(input.trim());
+
+        if (newQuantity < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Quantity cannot be negative.");
+            return;
+        }
+
+        boolean updated = inventory.updateStock(
+                productId, newQuantity
+        );
+
+        if (updated) {
+            JOptionPane.showMessageDialog(this,
+                    "Stock updated successfully!");
+
+            displayInventory();
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Unable to update product stock.");
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter a valid whole number.");
+    }
+}
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> {
+            new AgriculturalSupplyInventory().setVisible(true);
+        });
+    }
+}
+        
+  
 
