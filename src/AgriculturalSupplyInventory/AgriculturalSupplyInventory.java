@@ -121,4 +121,54 @@ public class AgriculturalSupplyInventory extends JFrame {
         displayButton.addActionListener(e -> displayInventory());
         updateButton.addActionListener(e -> updateStock());
     }
+
+        private void addProduct() {
+
+        String name = nameField.getText().trim();
+        String category = categoryField.getText().trim();
+        String quantityText = quantityField.getText().trim();
+        String unit = unitField.getText().trim();
+
+        if (name.isEmpty() || category.isEmpty()
+                || quantityText.isEmpty() || unit.isEmpty()) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Please complete all fields.");
+            return;
+        }
+
+        try {
+            int quantity = Integer.parseInt(quantityText);
+
+            if (quantity < 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Quantity cannot be negative.");
+                return;
+            }
+
+            boolean added = inventory.addProduct(
+                    name, category, quantity, unit
+            );
+
+            if (added) {
+                JOptionPane.showMessageDialog(this,
+                        "Product added successfully!");
+
+                nameField.setText("");
+                categoryField.setText("");
+                quantityField.setText("");
+                unitField.setText("");
+
+                displayInventory();
+
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Inventory is full!");
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a valid whole number for quantity.");
+        }
+    }
 }
