@@ -171,4 +171,38 @@ public class AgriculturalSupplyInventory extends JFrame {
                     "Please enter a valid whole number for quantity.");
         }
     }
+        private void searchProduct() {
+
+        String name = searchField.getText().trim();
+
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a product name.");
+            return;
+        }
+
+        Product result = inventory.searchProduct(name);
+
+        if (result != null) {
+
+            tableModel.setRowCount(0);
+
+            tableModel.addRow(new Object[]{
+                result.getProductId(),
+                result.getProductName(),
+                result.getCategory(),
+                result.getQuantity(),
+                result.getUnit()
+            });
+
+            JOptionPane.showMessageDialog(this,
+                    "Product found!");
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Product not found.");
+        }
+    }
 }
+    
+
