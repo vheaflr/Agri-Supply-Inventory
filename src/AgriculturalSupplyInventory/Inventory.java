@@ -18,7 +18,7 @@ public class Inventory {
         count = 0;
     }
 
-public boolean addProduct(String name, String category,
+    public boolean addProduct(String name, String category,
                               int quantity, String unit) {
 
         if (count >= products.length) {
@@ -42,4 +42,15 @@ public boolean addProduct(String name, String category,
     public int getCount() {
         return count;
     }
+    public Product searchProduct(String name) {
+
+    for (int i = 0; i < count; i++) {
+
+        if (products[i].getProductName().equalsIgnoreCase(name)) {
+            return products[i];
+        }
+    }
+
+    return null;
+}
 }
