@@ -113,6 +113,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         searchPanel.add(searchButton);
         searchPanel.add(displayButton);
         searchPanel.add(updateButton);
+        searchPanel.add(deleteButton);
 
         add(searchPanel, BorderLayout.SOUTH);
 
@@ -121,6 +122,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         searchButton.addActionListener(e -> searchProduct());
         displayButton.addActionListener(e -> displayInventory());
         updateButton.addActionListener(e -> updateStock());
+        
     }
 
         private void addProduct() {
