@@ -281,6 +281,41 @@ public class AgriculturalSupplyInventory extends JFrame {
             new AgriculturalSupplyInventory().setVisible(true);
         });
     }
+    private void deleteSelectedProduct() {
+
+    int selectedRow = inventoryTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a product to delete!");
+        return;
+    }
+
+    String productId = tableModel.getValueAt(
+            selectedRow, 0
+    ).toString();
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to delete this product?",
+            "Confirm Delete",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        boolean deleted = inventory.deleteProduct(productId);
+
+        if (deleted) {
+            JOptionPane.showMessageDialog(this,
+                    "Product deleted successfully!");
+
+            displayInventory();
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Product could not be deleted.");
+        }
+    }
+}
 }
         
   
