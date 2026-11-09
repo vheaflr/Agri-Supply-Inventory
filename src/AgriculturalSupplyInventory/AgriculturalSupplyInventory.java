@@ -106,6 +106,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         JButton searchButton = new JButton("Search Product");
         JButton displayButton = new JButton("Display All");
         JButton updateButton = new JButton("Update Stock");
+        JButton deleteButton = new JButton("Delete Selected");
 
         searchPanel.add(new JLabel("Search by Product Name:"));
         searchPanel.add(searchField);

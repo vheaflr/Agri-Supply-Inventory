@@ -70,5 +70,25 @@ public class Inventory {
 
         return false;
     }
+    public boolean deleteProduct(String productId) {
+
+    for (int i = 0; i < count; i++) {
+
+        if (products[i].getProductId().equalsIgnoreCase(productId)) {
+
+            // Shift remaining products to the left
+            for (int j = i; j < count - 1; j++) {
+                products[j] = products[j + 1];
+            }
+
+            products[count - 1] = null;
+            count--;
+
+            return true;
+        }
+    }
+
+    return false;
+}
 }
 
