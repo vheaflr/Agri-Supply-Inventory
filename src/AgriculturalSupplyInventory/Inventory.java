@@ -13,16 +13,11 @@ public class Inventory {
     private Product[] products;
     private int count;
 
-
-    private int nextProductId;
-
     public Inventory() {
         products = new Product[100];
         count = 0;
+    }
 
-        nextProductId = 1;
-        
-        
     public boolean addProduct(String name, String category,
                               int quantity, String unit) {
 
@@ -30,7 +25,7 @@ public class Inventory {
             return false;
         }
 
-        String productId = String.format("P%03d", nextProductId);
+        String productId = String.format("P%03d", count + 1);
 
         products[count] = new Product(
             productId, name, category, quantity, unit
