@@ -122,6 +122,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         searchButton.addActionListener(e -> searchProduct());
         displayButton.addActionListener(e -> displayInventory());
         updateButton.addActionListener(e -> updateStock());
+        deleteButton.addActionListener(e -> deleteSelectedProduct());
         
     }
 
