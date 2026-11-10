@@ -70,25 +70,29 @@ public class Inventory {
 
         return false;
     }
-    public boolean deleteProduct(String productId) {
+    public void deleteProduct(int index) {
 
-    for (int i = 0; i < count; i++) {
-
-        if (products[i].getProductId().equalsIgnoreCase(productId)) {
-
-            // Shift remaining products to the left
-            for (int j = i; j < count - 1; j++) {
-                products[j] = products[j + 1];
-            }
-
-            products[count - 1] = null;
-            count--;
-
-            return true;
-        }
+    if (index < 0 || index >= count) {
+        return;
     }
 
-    return false;
+    // Remove the selected product
+    for (int i = index; i < count - 1; i++) {
+        products[i] = products[i + 1];
+    }
+
+    products[count - 1] = null;
+    count--;
+
+    // Automatically renumber Product IDs
+    for (int i = 0; i < count; i++) {
+        products[i].setProductId(
+            String.format("P%03d", i + 1)
+        );
+    }
+
+    nextProductId = count + 1;
 }
 }
+
 
