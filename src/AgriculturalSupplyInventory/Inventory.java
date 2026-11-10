@@ -70,13 +70,24 @@ public class Inventory {
 
         return false;
     }
-    public void deleteProduct(int index) {
+    public boolean deleteProduct(String productId) {
 
-    if (index < 0 || index >= count) {
-        return;
+    int index = -1;
+
+    // Find the product using its ID
+    for (int i = 0; i < count; i++) {
+        if (products[i].getProductId().equals(productId)) {
+            index = i;
+            break;
+        }
     }
 
-    // Remove the selected product
+    // Product not found
+    if (index == -1) {
+        return false;
+    }
+
+    // Remove product and shift remaining products
     for (int i = index; i < count - 1; i++) {
         products[i] = products[i + 1];
     }
@@ -84,7 +95,7 @@ public class Inventory {
     products[count - 1] = null;
     count--;
 
-    // Automatically renumber Product IDs
+    // Automatically renumber IDs
     for (int i = 0; i < count; i++) {
         products[i].setProductId(
             String.format("P%03d", i + 1)
@@ -92,7 +103,11 @@ public class Inventory {
     }
 
     nextProductId = count + 1;
+
+    return true;
 }
 }
+
+
 
 
