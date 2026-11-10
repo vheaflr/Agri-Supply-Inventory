@@ -9,18 +9,19 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class AgriculturalSupplyInventory extends JFrame {
-
+         
     private Inventory inventory;
+    
 
     private JTextField nameField;
     private JTextField categoryField;
     private JTextField quantityField;
-    private JTextField unitField;
+    private JComboBox<String> unitComboBox;
     private JTextField searchField;
 
     private JTable inventoryTable;
     private DefaultTableModel tableModel;
-
+    
     public AgriculturalSupplyInventory() {
 
         inventory = new Inventory();
@@ -31,6 +32,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
+        // HEADER
         JLabel title = new JLabel(
                 "AGRICULTURAL SUPPLY INVENTORY",
                 SwingConstants.CENTER
@@ -41,10 +43,11 @@ public class AgriculturalSupplyInventory extends JFrame {
 
         add(title, BorderLayout.NORTH);
 
+        // MAIN PANEL
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
+        // ADD PRODUCT FORM
         JPanel formPanel = new JPanel(new GridLayout(5, 2, 8, 8));
-
         formPanel.setBorder(
                 BorderFactory.createTitledBorder("Add New Product")
         );
@@ -52,7 +55,19 @@ public class AgriculturalSupplyInventory extends JFrame {
         nameField = new JTextField();
         categoryField = new JTextField();
         quantityField = new JTextField();
-        unitField = new JTextField();
+        unitComboBox = new JComboBox<>(new String[]{
+    "Select Unit",
+    "Piece",
+    "Kilogram (kg)",
+    "Gram (g)",
+    "Liter (L)",
+    "Milliliter (mL)",
+    "Sack",
+    "Bottle",
+    "Box",
+    "Roll",
+    "Pack"
+});
 
         formPanel.add(new JLabel("Product Name:"));
         formPanel.add(nameField);
@@ -64,7 +79,7 @@ public class AgriculturalSupplyInventory extends JFrame {
         formPanel.add(quantityField);
 
         formPanel.add(new JLabel("Unit:"));
-        formPanel.add(unitField);
+        formPanel.add(unitComboBox);
 
         JButton addButton = new JButton("Add Product");
 
@@ -73,12 +88,10 @@ public class AgriculturalSupplyInventory extends JFrame {
 
         mainPanel.add(formPanel, BorderLayout.NORTH);
 
+        // INVENTORY TABLE
         String[] columns = {
-            "Product ID",
-            "Product Name",
-            "Category",
-            "Quantity",
-            "Unit"
+            "Product ID", "Product Name",
+            "Category", "Quantity", "Unit"
         };
 
         tableModel = new DefaultTableModel(columns, 0);
@@ -87,7 +100,6 @@ public class AgriculturalSupplyInventory extends JFrame {
         JScrollPane scrollPane = new JScrollPane(inventoryTable);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
-
         tablePanel.setBorder(
                 BorderFactory.createTitledBorder("Inventory Records")
         );
@@ -98,6 +110,7 @@ public class AgriculturalSupplyInventory extends JFrame {
 
         add(mainPanel, BorderLayout.CENTER);
 
+        // SEARCH PANEL
         JPanel searchPanel = new JPanel(new FlowLayout());
 
         searchField = new JTextField(20);
@@ -105,7 +118,8 @@ public class AgriculturalSupplyInventory extends JFrame {
         JButton searchButton = new JButton("Search Product");
         JButton displayButton = new JButton("Display All");
         JButton updateButton = new JButton("Update Stock");
-        JButton deleteButton = new JButton("Delete Selected");
+        JButton deleteButton = new JButton("Delete Stock");
+
 
         searchPanel.add(new JLabel("Search by Product Name:"));
         searchPanel.add(searchField);
@@ -113,9 +127,12 @@ public class AgriculturalSupplyInventory extends JFrame {
         searchPanel.add(displayButton);
         searchPanel.add(updateButton);
         searchPanel.add(deleteButton);
+       
+        
 
         add(searchPanel, BorderLayout.SOUTH);
 
+        // BUTTON ACTIONS
         addButton.addActionListener(e -> addProduct());
         searchButton.addActionListener(e -> searchProduct());
         displayButton.addActionListener(e -> displayInventory());
@@ -123,15 +140,16 @@ public class AgriculturalSupplyInventory extends JFrame {
         deleteButton.addActionListener(e -> deleteSelectedProduct());
     }
 
-    private void addProduct() {
+        private void addProduct() {
 
         String name = nameField.getText().trim();
         String category = categoryField.getText().trim();
         String quantityText = quantityField.getText().trim();
-        String unit = unitField.getText().trim();
+        String unit = (String) unitComboBox.getSelectedItem();
 
         if (name.isEmpty() || category.isEmpty()
-                || quantityText.isEmpty() || unit.isEmpty()) {
+        || quantityText.isEmpty()
+        || unit == null || unit.equals("Select Unit")) {
 
             JOptionPane.showMessageDialog(this,
                     "Please complete all fields.");
@@ -139,7 +157,6 @@ public class AgriculturalSupplyInventory extends JFrame {
         }
 
         try {
-
             int quantity = Integer.parseInt(quantityText);
 
             if (quantity < 0) {
@@ -153,36 +170,31 @@ public class AgriculturalSupplyInventory extends JFrame {
             );
 
             if (added) {
-
                 JOptionPane.showMessageDialog(this,
                         "Product added successfully!");
 
                 nameField.setText("");
                 categoryField.setText("");
                 quantityField.setText("");
-                unitField.setText("");
+                unitComboBox.setSelectedIndex(0);
 
                 displayInventory();
 
             } else {
-
                 JOptionPane.showMessageDialog(this,
                         "Inventory is full!");
             }
 
         } catch (NumberFormatException e) {
-
             JOptionPane.showMessageDialog(this,
                     "Please enter a valid whole number for quantity.");
         }
     }
-
-    private void searchProduct() {
+        private void searchProduct() {
 
         String name = searchField.getText().trim();
 
         if (name.isEmpty()) {
-
             JOptionPane.showMessageDialog(this,
                     "Please enter a product name.");
             return;
@@ -206,13 +218,11 @@ public class AgriculturalSupplyInventory extends JFrame {
                     "Product found!");
 
         } else {
-
             JOptionPane.showMessageDialog(this,
                     "Product not found.");
         }
     }
-
-    private void displayInventory() {
+        private void displayInventory() {
 
         tableModel.setRowCount(0);
 
@@ -229,115 +239,100 @@ public class AgriculturalSupplyInventory extends JFrame {
             });
         }
     }
+            
+        private void updateStock() {
 
-    private void updateStock() {
+    int selectedRow = inventoryTable.getSelectedRow();
 
-        int selectedRow = inventoryTable.getSelectedRow();
-
-        if (selectedRow == -1) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Please select a product from the table.");
-            return;
-        }
-
-        int modelRow = inventoryTable.convertRowIndexToModel(selectedRow);
-
-        String productId = tableModel.getValueAt(
-                modelRow, 0
-        ).toString();
-
-        String input = JOptionPane.showInputDialog(this,
-                "Enter the new stock quantity:");
-
-        if (input == null) {
-            return;
-        }
-
-        try {
-
-            int newQuantity = Integer.parseInt(input.trim());
-
-            if (newQuantity < 0) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Quantity cannot be negative.");
-                return;
-            }
-
-            boolean updated = inventory.updateStock(
-                    productId, newQuantity
-            );
-
-            if (updated) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Stock updated successfully!");
-
-                displayInventory();
-
-            } else {
-
-                JOptionPane.showMessageDialog(this,
-                        "Unable to update product stock.");
-            }
-
-        } catch (NumberFormatException e) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Please enter a valid whole number.");
-        }
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a product from the table.");
+        return;
     }
 
-    private void deleteSelectedProduct() {
+    String productId = tableModel.getValueAt(
+            selectedRow, 0
+    ).toString();
 
-        int selectedRow = inventoryTable.getSelectedRow();
+    String input = JOptionPane.showInputDialog(this,
+            "Enter the new stock quantity:");
 
-        if (selectedRow == -1) {
+    if (input == null) {
+        return;
+    }
 
+    try {
+        int newQuantity = Integer.parseInt(input.trim());
+
+        if (newQuantity < 0) {
             JOptionPane.showMessageDialog(this,
-                    "Please select a product to delete!");
+                    "Quantity cannot be negative.");
             return;
         }
 
-        int modelRow = inventoryTable.convertRowIndexToModel(selectedRow);
+        boolean updated = inventory.updateStock(
+                productId, newQuantity
+        );
 
-        String productId = tableModel.getValueAt(
-                modelRow, 0
-        ).toString();
+        if (updated) {
+            JOptionPane.showMessageDialog(this,
+                    "Stock updated successfully!");
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete this product?",
-                "Confirm Delete",
-                JOptionPane.YES_NO_OPTION);
+            displayInventory();
 
-        if (confirm == JOptionPane.YES_OPTION) {
-
-            boolean deleted = inventory.deleteProduct(productId);
-
-            if (deleted) {
-
-                JOptionPane.showMessageDialog(this,
-                        "Product deleted successfully!");
-
-                displayInventory();
-
-            } else {
-
-                JOptionPane.showMessageDialog(this,
-                        "Product could not be deleted.");
-            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Unable to update product stock.");
         }
-    }
 
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter a valid whole number.");
+    }
+}
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
             new AgriculturalSupplyInventory().setVisible(true);
         });
     }
-}
+    private void deleteSelectedProduct() {
 
+    int selectedRow = inventoryTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a product to delete!");
+        return;
+    }
+
+    String productId = tableModel.getValueAt(
+            selectedRow, 0
+    ).toString();
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to delete this product?",
+            "Confirm Delete",
+            JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+
+        boolean deleted = inventory.deleteProduct(productId);
+
+        if (deleted) {
+            JOptionPane.showMessageDialog(this,
+                    "Product deleted successfully!");
+
+            displayInventory();
+
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Product could not be deleted.");
+        }
+    }
+}
+}
         
   
 
+  
