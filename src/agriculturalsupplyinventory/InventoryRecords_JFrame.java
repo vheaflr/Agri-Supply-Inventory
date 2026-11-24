@@ -318,10 +318,8 @@ private void displayCategoryTables() {
     }// </editor-fold>//GEN-END:initComponents
 private void displaySortedInventory() {
 
-    inventory.sortByCategory();
-
-    DefaultTableModel model =
-            (DefaultTableModel) categoryTabbedPane.getModel();
+ DefaultTableModel model =
+        (DefaultTableModel) categoryTabbedPane.getModel();
 
     model.setRowCount(0);
 
@@ -329,7 +327,7 @@ private void displaySortedInventory() {
 
     for (int i = 0; i < inventory.getCount(); i++) {
 
-        model.addRow(new Object[]{
+        model.addRow(new Object[] {
             products[i].getProductId(),
             products[i].getProductName(),
             products[i].getCategory(),

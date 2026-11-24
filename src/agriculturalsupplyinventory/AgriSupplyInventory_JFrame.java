@@ -18,6 +18,7 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
     public AgriSupplyInventory_JFrame() {
         initComponents();
         inventory = new Inventory();
+
         setLocationRelativeTo(null);
     }
 
@@ -49,6 +50,7 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         label5 = new java.awt.Label();
+        displayInventory = new javax.swing.JButton();
         categoryComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -109,6 +111,9 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
         inventoryTable.setShowGrid(true);
         jScrollPane1.setViewportView(inventoryTable);
 
+        searchField.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        searchField.addActionListener(this::searchFieldActionPerformed);
+
         searchButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchButton.setText("Search Product");
         searchButton.addActionListener(this::searchButtonActionPerformed);
@@ -128,27 +133,35 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
         label5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         label5.setText("Search by Name Product: ");
 
+        displayInventory.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        displayInventory.setText("Display Inventory");
+        displayInventory.addActionListener(this::displayInventoryActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(displayButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(updateButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteButton)
-                .addContainerGap(111, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(updateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(displayInventory)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -156,15 +169,17 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(updateButton)
-                        .addComponent(displayButton)
-                        .addComponent(searchButton)
-                        .addComponent(deleteButton))
-                    .addComponent(label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 15, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(searchField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(updateButton)
+                            .addComponent(displayButton)
+                            .addComponent(searchButton)
+                            .addComponent(deleteButton)
+                            .addComponent(displayInventory))))
                 .addContainerGap())
         );
 
@@ -337,50 +352,55 @@ public class AgriSupplyInventory_JFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
-         if (inventory.getCount() == 0) {
+    if (inventory.getCount() == 0) {
         JOptionPane.showMessageDialog(this,
-                "No products available in the inventory!");
+                "No products added!");
         return;
     }
-        inventory.sortByCategory();
-        InventoryRecords_JFrame recordsFrame =
-        new InventoryRecords_JFrame(inventory);
+        DefaultTableModel model =
+            (DefaultTableModel) inventoryTable.getModel();
 
-        recordsFrame.setVisible(true);
+    model.setRowCount(0);
+
+    Products[] products = inventory.getProducts();
+
+    for (int i = 0; i < inventory.getCount(); i++) {
+        model.addRow(new Object[]{
+            products[i].getProductId(),
+            products[i].getProductName(),
+            products[i].getCategory(),
+            products[i].getQuantity(),
+            products[i].getUnit()
+        });
+    }
     }//GEN-LAST:event_displayButtonActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        String searchName = searchField.getText().trim();
+    String searchName = searchField.getText().trim();
 
-if (searchName.isEmpty()) {
-    JOptionPane.showMessageDialog(this,
-            "Please enter a product name to search.");
-    return;
-}
+    if (searchName.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a product name.");
+        return;
+    }
 
-Products found = inventory.searchProduct(searchName);
-
-if (found != null) {
+    Products found = inventory.searchProduct(searchName);
 
     DefaultTableModel model =
             (DefaultTableModel) inventoryTable.getModel();
 
     model.setRowCount(0);
 
-    model.addRow(new Object[]{
-        found.getProductId(),
-        found.getProductName(),
-        found.getCategory(),
-        found.getQuantity(),
-        found.getUnit()
-    });
-
-} else {
-
-    JOptionPane.showMessageDialog(this,
-            "Product not found!");
-
-}
+    if (found != null) {
+        model.addRow(new Object[]{
+            found.getProductId(),
+            found.getProductName(),
+            found.getCategory(),
+            found.getQuantity(),
+            found.getUnit()
+        });
+    } else {
+        JOptionPane.showMessageDialog(this, "Product not found!");
+    }
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -464,6 +484,54 @@ if (confirm == JOptionPane.YES_OPTION) {
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryComboBoxActionPerformed
 
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+  String searchName = searchField.getText().trim();
+
+if (searchName.isEmpty()) {
+    JOptionPane.showMessageDialog(this,
+            "Please enter a product name to search.");
+    return;
+}
+
+Products found = inventory.searchProduct(searchName);
+
+if (found != null) {
+
+    DefaultTableModel model =
+            (DefaultTableModel) inventoryTable.getModel();
+
+    model.setRowCount(0);
+
+    model.addRow(new Object[]{
+        found.getProductId(),
+        found.getProductName(),
+        found.getCategory(),
+        found.getQuantity(),
+        found.getUnit()
+    });
+
+} else {
+
+    JOptionPane.showMessageDialog(this,
+            "Product not found!");
+
+}
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void displayInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayInventoryActionPerformed
+        if (inventory.getCount() == 0) {
+        JOptionPane.showMessageDialog(this,
+                "No products available in the inventory!");
+        return;
+    }
+        inventory.sortByCategory();
+        InventoryRecords_JFrame recordsFrame =
+        new InventoryRecords_JFrame(inventory);
+
+        recordsFrame.setVisible(true);
+
+    }//GEN-LAST:event_displayInventoryActionPerformed
+
 private void displayInventory() {
 
     DefaultTableModel model =
@@ -517,6 +585,7 @@ private void displayInventory() {
     private javax.swing.JComboBox<String> categoryComboBox;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton displayButton;
+    private javax.swing.JButton displayInventory;
     private javax.swing.JTable inventoryTable;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

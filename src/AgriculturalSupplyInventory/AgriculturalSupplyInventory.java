@@ -200,7 +200,7 @@ public class AgriculturalSupplyInventory extends JFrame {
             return;
         }
 
-        Product result = inventory.searchProduct(name);
+        Products result = inventory.searchProduct(name);
 
         if (result != null) {
 
@@ -226,7 +226,7 @@ public class AgriculturalSupplyInventory extends JFrame {
 
         tableModel.setRowCount(0);
 
-        Product[] products = inventory.getProducts();
+        Products[] products = inventory.getProducts();
 
         for (int i = 0; i < inventory.getCount(); i++) {
 
